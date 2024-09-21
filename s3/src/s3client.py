@@ -14,7 +14,7 @@ S3_DIR_PATH = os.path.dirname(os.path.dirname(__file__))
 if __name__ == "__main__":
     sys.path.append(os.path.dirname(S3_DIR_PATH))
     
-from constants import AWS_ACCESS_KEY, AWS_SECRET_KEY
+from constants import AWS_ACCESS_KEY, AWS_SECRET_KEY, AWS_SESSION_TOKEN
 
 
 class S3Client():
@@ -25,6 +25,7 @@ class S3Client():
     def __init__(self, 
                  aws_access_key_id:str = AWS_ACCESS_KEY,
                  aws_secret_access_key:str = AWS_SECRET_KEY, 
+                 aws_session_token: str = AWS_SESSION_TOKEN,
                  bucket_name:str = "stagiaire-alternant",
                  authorized_access:str="") -> None:
         """
@@ -45,6 +46,7 @@ class S3Client():
         self.client = boto3.client(service_name='s3', 
                                    aws_access_key_id=aws_access_key_id, 
                                    aws_secret_access_key=aws_secret_access_key, 
+                                   aws_session_token=aws_session_token,
                                    region_name='us-east-1')
         self.bucket_name = bucket_name
         self.__authorized_access = authorized_access
