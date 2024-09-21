@@ -162,5 +162,5 @@ cython_debug/
 #.idea/
 secrets.txt
 .env
-temp/*
+_temp/*
 *.csv
