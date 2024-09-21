@@ -10,7 +10,7 @@ if __name__ == "__main__":
 from constants import AWS_ACCESS_KEY, AWS_SECRET_KEY, AWS_SESSION_TOKEN
 
 
-class BedrockClient():
+class BedrockRuntimeClient():
     """
     Standard S3 class with all purpose methods.
     """
@@ -34,7 +34,7 @@ class BedrockClient():
         - `path` kwarg refers to a local path
         """
 
-        self.client = boto3.client(service_name='bedrock', 
+        self.client = boto3.client(service_name='bedrock-runtime', 
                                    aws_access_key_id=aws_access_key_id, 
                                    aws_secret_access_key=aws_secret_access_key, 
                                    aws_session_token=aws_session_token,
@@ -91,11 +91,12 @@ class BedrockClient():
 
 
 if __name__ == "__main__":
-    model_id = 'ai21-j1-large' 
+    model_id = 'amazon.titan-text-lite-v1' 
     prompt_text = 'What is the future of AI in aerospace?'
+    prompt_text = 'Give me a recipee of fish and chips?'
     
-    bedrock_cli = BedrockClient()
-    bedrock_cli.list_foundation_models()
+    bedrock_cli = BedrockRuntimeClient()
+    # bedrock_cli.list_foundation_models()
     response = bedrock_cli.invoke_bedrock_model(model_id, prompt_text)
     
     if response:
