@@ -12,7 +12,7 @@ SERVER_DIR_PATH = os.path.abspath(__file__).split("services")[0]
 if __name__ == "__main__":
     sys.path.append(SERVER_DIR_PATH)
 
-from main import AWS_KEY_ID, AWS_KEY_ACCESS
+from constants import AWS_ACCESS_KEY, AWS_SECRET_KEY
 
 class S3Admin():
     """
@@ -22,8 +22,8 @@ class S3Admin():
     def __init__(self) -> None:
         
         self.client = boto3.client(service_name='s3', 
-                                   aws_access_key_id=AWS_KEY_ID, 
-                                   aws_secret_access_key=AWS_KEY_ACCESS, 
+                                   aws_access_key_id=AWS_ACCESS_KEY, 
+                                   aws_secret_access_key=AWS_SECRET_KEY, 
                                    region_name='eu-west-1')
         
         # S3Client neeeds a working folder to download/upload files from a unique entry point
