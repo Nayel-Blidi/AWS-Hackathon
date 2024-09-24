@@ -50,29 +50,24 @@ class BedrockRuntimeClient():
         Returns:
             dict: Response from the AWS Bedrock model.
         """
-        try:
-            # Payload for the model invocation
-            payload = {
-                "inputText": prompt_text
-            }
-            
-            # Invoke the model on AWS Bedrock
-            response = self.client.invoke_model(
-                modelId=model_id,  # Specify the Bedrock model ID
-                accept='application/json',  # Specify response format
-                contentType='application/json',  # Specify content type for the request
-                body=json.dumps(payload)  # Convert the payload to JSON string
-            )
-            
-            response_body = json.loads(response['body'].read())
-            if display: print(response_body)
-
-            return response_body
+        # Payload for the model invocation
+        payload = {
+            "inputText": prompt_text
+        }
         
-        except Exception as e:
-            print(f"An error occurred while invoking the model: {str(e)}")
-            return None
+        # Invoke the model on AWS Bedrock
+        response = self.client.invoke_model(
+            modelId=model_id,  # Specify the Bedrock model ID
+            accept='application/json',  # Specify response format
+            contentType='application/json',  # Specify content type for the request
+            body=json.dumps(payload)  # Convert the payload to JSON string
+        )
+        
+        response_body = json.loads(response['body'].read())
+        if display: print(response_body)
 
+        return response_body
+        
 
     def _list_foundation_models(self, display: bool = False):
         """
