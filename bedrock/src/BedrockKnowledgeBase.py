@@ -8,7 +8,7 @@ if __name__ == "__main__":
     sys.path.append(os.path.dirname(BEDROCK_DIR_PATH))
 
 from constants import AWS_ACCESS_KEY, AWS_SECRET_KEY, AWS_SESSION_TOKEN, KNOWLEDGE_BASE_ID
-from BedrockClient import BedrockClient
+from bedrock.src.BedrockClient import BedrockClient
 
 class BedrockKnowledgeBase(BedrockClient):
     """
@@ -94,6 +94,8 @@ class BedrockKnowledgeBase(BedrockClient):
             knowledge_bases.extend(page["agentKnowledgeBaseSummaries"])
 
         return knowledge_bases
+    
+
 
 
 if __name__ == "__main__":
