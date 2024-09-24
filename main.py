@@ -82,17 +82,18 @@ def use_case_2():
     # Now the downloaded RAG content is merged into a model prompt 
     knowledge_client = BedrockKnowledgeBase()
     rag_content = knowledge_client._read_files_from_folder(os.path.join(MAIN_DIR, "_outputs"))
-    input_content = knowledge_client._read_files_from_folder(os.path.join(MAIN_DIR, "_input"))
+    input_content = knowledge_client._read_files_from_folder(os.path.join(MAIN_DIR, "_inputs"))
     prompt = rag_content \
              + "\n Using these standards and test plans file examples, I want you to generate a test plan for the following file:" \
              + input_content \
              + "\n Now generate a test plan similar to the previous examples for this input."
-    
+
     # Using this RAG prompt, a GPT model generates an output
     runtime_client = BedrockRuntimeClient()
     response_text = runtime_client._invoke_bedrock_model(model_id='amazon.titan-text-lite-v1', prompt_text=prompt)
-    with open(os.path.join(MAIN_DIR, "_generated_TestPlan.txt")) as f:
-        f.write(response_text)
+    print(response_text["results"][0]["outputText"])
+    with open(os.path.join(MAIN_DIR, "_outputs", "_generated_TestPlan.txt"), "w", encoding='utf-8') as f:
+        f.write(response_text["results"][0]["outputText"])
     return True
 
 
@@ -107,13 +108,14 @@ def use_case_3():
     file_content = knowledge_client._read_files_from_folder(os.path.join(MAIN_DIR, "_inputs"))
     prompt = file_content \
              + "This is the content of a test plan and the corresponding supplier report." \
-             + "Compare the two, highlight the differences, and make a general report on the differences and issues raised."
+             + "Compare the two, highlight the differences, and make a general report on the differences and issues raised." \
+             + "Do not repeat information that has already been mentionned, but you can quote the original documents."
     
     # A NLP model will compare the contents using the created augmented prompt
     runtime_client = BedrockRuntimeClient()
     response_text = runtime_client._invoke_bedrock_model(model_id='amazon.titan-text-lite-v1', prompt_text=prompt)
-    with open(os.path.join(MAIN_DIR, "_generated_Comparison.txt")) as f:
-        f.write(response_text)
+    with open(os.path.join(MAIN_DIR, "_outputs", "_generated_Comparison.txt"), "w") as f:
+        f.write(response_text["results"][0]["outputText"])
     return True
 
 
