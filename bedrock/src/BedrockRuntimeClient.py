@@ -40,11 +40,11 @@ class BedrockRuntimeClient():
                                    aws_session_token=aws_session_token,
                                    region_name='us-east-1')
 
-    def invoke_bedrock_model(self, model_id, prompt_text):
+    def _invoke_bedrock_model(self, model_id: str, prompt_text: str, display: bool = False):
         """
         Function to interact with an AWS Bedrock model using boto3.
         Args:
-            model_id (str): The ID of the model in AWS Bedrock to invoke (e.g., 'ai21-j1-large').
+            model_id (str): The ID of the model in AWS Bedrock to invoke.
             prompt_text (str): The input text to send to the model.
         
         Returns:
@@ -64,15 +64,17 @@ class BedrockRuntimeClient():
                 body=json.dumps(payload)  # Convert the payload to JSON string
             )
             
-            # Parse the response
             response_body = json.loads(response['body'].read())
+            if display: print(response_body)
+
             return response_body
         
         except Exception as e:
             print(f"An error occurred while invoking the model: {str(e)}")
             return None
-        
-    def list_foundation_models(self):
+
+
+    def _list_foundation_models(self, display: bool = False):
         """
         List the available Amazon Bedrock foundation models.
 
@@ -81,25 +83,17 @@ class BedrockRuntimeClient():
 
         response = self.client.list_foundation_models()
         models = response["modelSummaries"]
-        print(models)
+        if display: print(models)
 
         return models
     
 
 
 
-
-
 if __name__ == "__main__":
     model_id = 'amazon.titan-text-lite-v1' 
-    prompt_text = 'What is the future of AI in aerospace?'
     prompt_text = 'Give me a recipee of fish and chips?'
     
     bedrock_cli = BedrockRuntimeClient()
-    # bedrock_cli.list_foundation_models()
-    response = bedrock_cli.invoke_bedrock_model(model_id, prompt_text)
+    response = bedrock_cli._invoke_bedrock_model(model_id, prompt_text, display=True)
     
-    if response:
-        print("Response from Bedrock Model:", json.dumps(response, indent=2))
-    else:
-        print("No response received from the model.")
