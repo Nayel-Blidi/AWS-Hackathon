@@ -66,7 +66,7 @@ class BedrockClient():
                 try:
                     with open(file_path, 'r', encoding='utf-8') as file:
                         content = file.read()
-                        concatenated_content += content + "\n"
+                        concatenated_content += f"\nThis is the content of a file named {os.path.basename(file_path)}:\n" + content + "\n"
                 except (UnicodeDecodeError, OSError) as e:
                     print(f"Skipping non-compatible file: {filename} - {str(e)}")
         
