@@ -163,4 +163,6 @@ cython_debug/
 secrets.txt
 .env
 _temp/*
+_outputs/*
+_inputs/*
 *.csv
