@@ -34,22 +34,22 @@ class BedrockClient():
         - `path` kwarg refers to a local path
         """
 
-        self.client = boto3.client(service_name='bedrock', 
+        self.bedrock_client = boto3.client(service_name='bedrock', 
                                    aws_access_key_id=aws_access_key_id, 
                                    aws_secret_access_key=aws_secret_access_key, 
                                    aws_session_token=aws_session_token,
                                    region_name='us-east-1')
 
-    def list_foundation_models(self):
+    def list_foundation_models(self, display: bool = False):
         """
         List the available Amazon Bedrock foundation models.
 
         :return: The list of available bedrock foundation models.
         """
 
-        response = self.client.list_foundation_models()
+        response = self.bedrock_client.list_foundation_models()
         models = response["modelSummaries"]
-        print(models)
+        if display: print(models)
 
         return models
     
