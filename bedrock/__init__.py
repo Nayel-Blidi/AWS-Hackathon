@@ -3,10 +3,10 @@ AWS init package. Every class can be imported from this folder without going dee
 """
 
 __all__ = [
-    "S3Admin",
-    "S3Client",
+    "BedrockRuntimeClient",
+    "BedrockKnowledgeBase",
 ]
 
 
-from .src.s3admin import S3Admin
-from .src.s3client import S3Client
+from bedrock.src.BedrockRuntimeClient import BedrockRuntimeClient
+from bedrock.src.BedrockKnowledgeBase import BedrockKnowledgeBase

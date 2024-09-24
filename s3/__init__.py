@@ -3,10 +3,8 @@ AWS init package. Every class can be imported from this folder without going dee
 """
 
 __all__ = [
-    "S3Admin",
     "S3Client",
 ]
 
 
-from .src.s3admin import S3Admin
-from .src.s3client import S3Client
+from s3.src.s3client import S3Client
