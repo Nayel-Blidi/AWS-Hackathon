@@ -52,7 +52,25 @@ class BedrockClient():
         if display: print(models)
 
         return models
-    
+        
+    def _read_files_from_folder(self, folder_path: str):
+        """
+        Reads all the files in a folder and return the concatenated content. Skips invalid files.
+        """
+
+        concatenated_content = ""
+        for filename in os.listdir(folder_path):
+            file_path = os.path.join(folder_path, filename)
+            
+            if os.path.isfile(file_path):
+                try:
+                    with open(file_path, 'r', encoding='utf-8') as file:
+                        content = file.read()
+                        concatenated_content += content + "\n"
+                except (UnicodeDecodeError, OSError) as e:
+                    print(f"Skipping non-compatible file: {filename} - {str(e)}")
+        
+        return concatenated_content
 
 
 
