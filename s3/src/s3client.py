@@ -58,33 +58,6 @@ class S3Client():
             print("S3Client >> Temporary folder created:", self.temp_folder_path)
 
 
-    @staticmethod
-    def _verify_access(func:Callable):
-        """
-        Checks if the client is accessing authorized ressources, raises ``PermissionError`` otherwise.
-        """
-        
-        @wraps(func)
-        def wrapper(self, *args, **kwargs):
-                
-            def check_keys(keys):
-                if isinstance(keys, str):
-                    keys = [keys]
-                if not all(key.startswith(self.__authorized_access) for key in keys):
-                    raise PermissionError(f"S3Client >> Attempting to access content outside of DataHive: ({keys})")
-            
-            if 'key' in kwargs:
-                check_keys(kwargs['key'])
-            elif 'keys' in kwargs:
-                check_keys(kwargs['keys'])
-            else:
-                raise SyntaxError(f"S3Client >> Failed to verify content access request. Ensure key/keys were passed as kwargs")
-
-            return func(self, *args, **kwargs)
-        
-        return wrapper
-
-
     def _empty_folder(self, path:str=None):
         """
         Empties a folder. By default, clears the temp folder.
@@ -111,7 +84,7 @@ class S3Client():
                     print(f"S3Client >> Failed to empty {path}: {e}")
 
 
-    @_verify_access
+    
     def ensure_key(self, key: str):
         """
         Checks if the cloud keys exist and returns a tuple of the results
@@ -132,7 +105,7 @@ class S3Client():
             return key, False
     
 
-    @_verify_access
+    
     def ensure_keys(self, keys: list[str]):
         """
         Checks if the cloud keys exist and returns a dictionnary of the results, 
@@ -166,9 +139,7 @@ class S3Client():
 
         return results
 
-
-
-    @_verify_access
+    
     def download_file(self, key: str, file_idx: int = 0, path: str = None):
         """
         Downloads a file into the path folder where file is renamed fileidx_filename.fileextension
@@ -188,7 +159,7 @@ class S3Client():
                                   Key=key, 
                                   Filename=path)
 
-    @_verify_access
+    
     def download_files(self, keys:list[str], paths: list[str] = None):
         """
         Downloads a list of files into the path folder where each file is renamed fileidx_filename.fileextension
@@ -210,7 +181,7 @@ class S3Client():
             paths = [os.path.join(path, f"{idx}{os.path.splitext(key)[-1]}") for idx, key in enumerate(keys)]
         else:
             if not all([os.path.exists(os.path.dirname(path)) for path in paths]):
-                print("S3DataHive >> Download path do not exist. Download aborted")
+                print("S3Client >> Download path do not exist. Download aborted")
                 return False
 
         failed_files = []
@@ -234,8 +205,7 @@ class S3Client():
 
         return failed_files
 
-
-    @_verify_access
+    
     def download_directory(self, key:str, path:str=None):
         """
         Downloads all the files from a folder into a single output folder where
@@ -250,15 +220,6 @@ class S3Client():
         Returns
         -------
         - failed_files: the list of files that were not correctly downloaded
-
-        Example
-        -------
-        >>> folder = DataHive/Data
-        >>> os.listdir(folder)
-        ["img1.jpg", "cat.png", "sample.wav"]
-        >>> download_directory(key=folder)
-        >>> os.listdir(path)
-        ["0_img1.jpg", "1_cat.png", "2_sample.wav"]
         """
 
         if not path:
@@ -300,7 +261,7 @@ class S3Client():
 
         return failed_files
 
-    @_verify_access
+    
     def list_keys(self, key:str=""):
         """
         Returns a list of all the files present in a bucket and returns the keys.
@@ -320,7 +281,6 @@ class S3Client():
         return file_list
         
 
-    @_verify_access
     def make_directory(self, key:str):
         """
         Creates a directory on the cloud.
@@ -334,7 +294,6 @@ class S3Client():
             self.client.put_object(Bucket=self.bucket_name, Key=key)
 
 
-    @_verify_access
     def make_directories(self, keys:list[str]):
         """
         Creates directories on the cloud
@@ -365,8 +324,7 @@ class S3Client():
 
         return failed_files
 
-
-    @_verify_access             
+    
     def delete_key(self, key:str):
         """
         Deletes a file on the cloud from its key
@@ -380,7 +338,6 @@ class S3Client():
             self.client.delete_object(Bucket=self.bucket_name, Key=key)
 
 
-    @_verify_access
     def delete_keys(self, keys:list[str]):
         """
         Deletes from the bucket the files specified in keys, 
@@ -415,8 +372,6 @@ class S3Client():
             return None
 
         
-
-    @_verify_access
     def cut_key(self, key_original:str, key_cut:str):
         """
         Cut from the key_original file to key_cut
@@ -439,7 +394,6 @@ class S3Client():
             print(f'file: {key_cut} was successfully cut from {key_original}')
 
 
-    @_verify_access   
     def cut_list_keys(self, keys_original:list[str], keys_cut:list[str]):
         """
         Cut from list of the keys_original file to the list of keys_cut
@@ -453,7 +407,6 @@ class S3Client():
                 self.cut_key(key_original, key_cut)
 
 
-    @_verify_access
     def copy_key(self, key_original:str, key_copy:str):
         """
         Copy from the key_original file to key_copy
@@ -474,8 +427,7 @@ class S3Client():
             self.client.copy(CopySource=dict_key_original, Bucket=self.bucket_name, Key=key_copy)
             print(f'file: {key_copy} was successfully copy from {key_original}')
 
-
-    @_verify_access 
+     
     def copy_list_keys(self, keys_original:list[str], keys_copy:list[str]):
         """
         Copy from list of the key_original file to the list of key_copy
@@ -489,7 +441,6 @@ class S3Client():
                 self.cut_key(key_original, key_copy)
 
 
-    @_verify_access   
     def rename_key(self, key_original:str, new_name:str):
         """
         Renames from the key_original file to new_name
@@ -512,7 +463,7 @@ class S3Client():
             self.client.delete_object(Bucket=self.bucket_name, Key=key_original)
             print(f'file: {key_original} was successfully renamed to {new_key}')
 
-    @_verify_access     
+         
     def rename_list_keys(self, keys_original:list[str], new_names:list[str]):
         """
         Renames from the list of the key_original file to the list of the new_name
@@ -525,8 +476,7 @@ class S3Client():
             for key_original, new_name in zip(keys_original, new_names):
                 self.cut_key(key_original, new_name)
 
-
-    @_verify_access
+    
     def upload_file(self, key:str, path:str):
         """
         Uploads a local file (path) into its cloud location (key)
@@ -541,7 +491,7 @@ class S3Client():
         
         return None
 
-    @_verify_access
+    
     def upload_files(self, keys:list[str], paths:list[str]):
         """
         Uploads a list of local files (paths) into their cloud locations (keys)
@@ -571,7 +521,7 @@ class S3Client():
 
         return None
 
-    @_verify_access     
+         
     def upload_directory(self, key:str, path:str):
         """
         Uploads local directory to key from bucket
