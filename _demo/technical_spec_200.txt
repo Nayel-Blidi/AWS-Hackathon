@@ -1,0 +1,36 @@
+ Technical Specification Document for Study N456
+
+#### Chapter 1: Requirement - Impact Toughness
+- **Requirement Description:** 
+  The component must exhibit impact toughness within specified limits.
+- **Methods to Perform Tests:**
+  1. Perform impact test using a Charpy impact tester.
+  2. Measure the absorbed energy and compare against specified limits listed in Table 1.1.
+
+**Table 1.1: Impact Toughness Limits**
+
+| Test Sample | Specified Limit (Joules) |
+|-------------|---------------------------|
+| Sample A    | 20-25                    |
+| Sample B    | 22-27                    |
+| Sample C    | 18-23                    |
+
+---
+
+#### Chapter 2: Requirement - Thermal Expansion Coefficient
+- **Requirement Description:**
+  The component’s thermal expansion coefficient must be within specified limits.
+- **Methods to Perform Tests:**
+  1. Measure the thermal expansion coefficient using a dilatometer.
+  2. Compare the measured values with the specified limits listed in Table 2.1.
+
+**Table 2.1: Thermal Expansion Coefficient Requirements**
+
+| Temperature Range (°C) | Specified Limit (µm/m·K) |
+|------------------------|--------------------------|
+| 25-100                 | 10-12                    |
+| 100-200                | 12-14                    |
+| 200-300                | 14-16                    |
+
+---
+

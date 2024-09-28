@@ -1,0 +1,36 @@
+ Qualification Test Plan (QTP) Compilation
+
+**Table 3.1: Summary of Tests and Requirements (Based on Tech Spec N456)**
+
+| Test                    | Requirement                           | Reference Spec       | Compliance Criteria                        |
+|-------------------------|---------------------------------------|----------------------|--------------------------------------------|
+| Impact Toughness        | Absorbed energy within specified limits | Tech Spec N456, Chap 1 | All samples must meet specified limits     |
+| Thermal Expansion Coefficient | Expansion coefficient within limits | Tech Spec N456, Chap 2 | Measurements must fall within specified range|
+
+---
+
+### Individual Test Chapters
+
+#### Impact Toughness Test
+- **Objective:** Ensure the component meets impact toughness limits.
+- **Test Conditions:** Room temperature.
+- **Measurement Equipment:** Charpy Impact Tester.
+- **Procedure:**
+  1. Align the sample with the impact tester.
+  2. Perform the impact test and record the absorbed energy.
+  3. Compare the absorbed energy with specified limits.
+
+---
+
+#### Thermal Expansion Coefficient Test
+- **Objective:** Ensure the component meets thermal expansion coefficient limits.
+- **Test Conditions:** Room temperature.
+- **Measurement Equipment:** Dilatometer.
+- **Procedure:**
+  1. Place the sample in the dilatometer.
+  2. Measure the thermal expansion as temperature varies.
+  3. Record the expansion coefficient.
+  4. Compare the measured values with specified limits.
+
+---
+

@@ -1,0 +1,37 @@
+ Supplier Test Report: Study N456 Compliance Review
+
+#### Summary:
+- **Impact Toughness:
+The impact toughness of the component was measured using the Charpy impact tester. All test samples met the specified impact toughness limits.
+
+Impact Toughness Results:
+
+Sample A: Measured value: 22 Joules (Specified limit: 20-25 Joules)
+Sample B: Measured value: 24 Joules (Specified limit: 22-27 Joules)
+Sample C: Measured value: 19 Joules (Specified limit: 18-23 Joules)
+
+Thermal Expansion Coefficient:
+The thermal expansion coefficient was measured across different temperature ranges using a dilatometer. The results varied, with Sample B falling outside the specified limits at higher temperatures.
+
+- **Thermal Expansion Coefficient Results:
+
+Temperature Range 25-100°C:
+
+Sample A: Measured value: 11.5 µm/m·K (Specified limit: 10-12 µm/m·K)
+Sample B: Measured value: 11.8 µm/m·K (Specified limit: 10-12 µm/m·K)
+Sample C: Measured value: 10.5 µm/m·K (Specified limit: 10-12 µm/m·K)
+Temperature Range 100-200°C:
+
+Sample A: Measured value: 13.2 µm/m·K (Specified limit: 12-14 µm/m·K)
+Sample B: Measured value: 14.8 µm/m·K (Specified limit: 12-14 µm/m·K)
+Sample C: Measured value: 13.5 µm/m·K (Specified limit: 12-14 µm/m·K)
+Temperature Range 200-300°C:
+
+Sample A: Measured value: 15.5 µm/m·K (Specified limit: 14-16 µm/m·K)
+Sample B: Measured value: 16.5 µm/m·K (Specified limit: 14-16 µm/m·K)
+Sample C: Measured value: 15.2 µm/m·K (Specified limit: 14-16 µm/m·K)
+
+- **Additional Notes:
+The supplier mentioned using a secondary method for the thermal expansion coefficient test due to primary equipment maintenance.
+The primary method specified in the Qualification Test Plan (QTP) should be used unless the secondary method is validated and approved.
+Recommendation: Re-test Sample B using the primary dilatometer once it is back in operation to confirm the thermal expansion coefficient at higher temperatures and ensure compliance.
