@@ -30,17 +30,28 @@ def use_case_1():
 
     # Pompt is embedded and compared to similar content 
     print("QualificationAssistant >> Comparing inputs with the existing database.")
-    bucket_name = "stagiaire-alternant" # TODO REPLACE WITH stagiaire-alternant-standards
+    bucket_name = "stagiaire-alternant-standards"
     s3_locations = knowledge_client.retreive_similar(prompt=files_content)
     s3_locations = np.unique([location.split(sep=bucket_name+"/", maxsplit=1)[-1] 
                                 for location in knowledge_client.retreive_similar(prompt=files_content)]).tolist()
 
-    # Similar content is downloaded into the outputs/ folder
-    s3_cli = S3Client(bucket_name=bucket_name)
+    print(s3_locations, sep="\n")
+
+    # Similar Standards are downloaded into the outputs/ folder
+    s3_cli = S3Client(bucket_name="stagiaire-alternant-standards")
     s3_cli._empty_folder(os.path.join(MAIN_DIR, "_outputs"))
-    s3_cli.download_files(keys=s3_locations, 
-                            paths=[os.path.join(MAIN_DIR, "_outputs", os.path.basename(file)) for file in s3_locations])
-    print(f"QualificationAssistant >> Retreived and saved {len(s3_locations)} files into _outputs/")
+    print("QualificationAssistant >> Dowloading RAG Standards.")
+    s3_cli.download_files(keys=[f"technical_spec_{key.rsplit("_", maxsplit=1)[-1]}" for key in s3_locations], 
+                            paths=[os.path.join(MAIN_DIR, "_outputs", f"{os.path.basename(file)}") for file in s3_locations])
+    print(f"QualificationAssistant >> Retreived and saved {len(s3_locations)} Standards files into _outputs/")
+
+    # Similar TestPlans are downloaded into the outputs/ folder
+    s3_cli = S3Client(bucket_name="stagiaire-alternant-testplans")
+    print("QualificationAssistant >> Dowloading RAG TestPlans.")
+    s3_cli.download_files(keys=[f"test_plan_{key.rsplit("_", maxsplit=1)[-1]}" for key in s3_locations], 
+                            paths=[os.path.join(MAIN_DIR, "_outputs", f"test_plan_{file.rsplit("_", maxsplit=1)[-1]}") for file in s3_locations])
+    print(f"QualificationAssistant >> Retreived and saved {len(s3_locations)} TestPlans files into _outputs/")
+
     return True
 
 
@@ -68,15 +79,15 @@ def use_case_2():
     s3_cli = S3Client(bucket_name="stagiaire-alternant-standards")
     s3_cli._empty_folder(os.path.join(MAIN_DIR, "_outputs"))
     print("QualificationAssistant >> Dowloading RAG Standards.")
-    s3_cli.download_files(keys=s3_locations, 
-                            paths=[os.path.join(MAIN_DIR, "_outputs", f"standard_{os.path.basename(file)}") for file in s3_locations])
+    s3_cli.download_files(keys=[f"technical_spec_{key.rsplit("_", maxsplit=1)[-1]}" for key in s3_locations], 
+                            paths=[os.path.join(MAIN_DIR, "_outputs", f"{os.path.basename(file)}") for file in s3_locations])
     print(f"QualificationAssistant >> Retreived and saved {len(s3_locations)} Standards files into _outputs/")
 
     # Similar TestPlans are downloaded into the outputs/ folder
     s3_cli = S3Client(bucket_name="stagiaire-alternant-testplans")
     print("QualificationAssistant >> Dowloading RAG TestPlans.")
-    s3_cli.download_files(keys=s3_locations, 
-                            paths=[os.path.join(MAIN_DIR, "_outputs", f"testplans_{os.path.basename(file)}") for file in s3_locations])
+    s3_cli.download_files(keys=[f"test_plan_{key.rsplit("_", maxsplit=1)[-1]}" for key in s3_locations], 
+                            paths=[os.path.join(MAIN_DIR, "_outputs", f"test_plan_{file.rsplit("_", maxsplit=1)[-1]}") for file in s3_locations])
     print(f"QualificationAssistant >> Retreived and saved {len(s3_locations)} TestPlans files into _outputs/")
 
     # Now the downloaded RAG content is merged into a model prompt 
@@ -86,12 +97,11 @@ def use_case_2():
     prompt = rag_content \
              + "\n Using these standards and test plans file examples, I want you to generate a test plan for the following file:" \
              + input_content \
-             + "\n Now generate a test plan similar to the previous examples for this input."
+             + "\n Now generate a test plan similar to the previous examples for this input. The test plan must describe the requirements, and describe the individual testing steps to perform."
 
     # Using this RAG prompt, a GPT model generates an output
     runtime_client = BedrockRuntimeClient()
-    response_text = runtime_client._invoke_bedrock_model(model_id='amazon.titan-text-lite-v1', prompt_text=prompt)
-    print(response_text["results"][0]["outputText"])
+    response_text = runtime_client._invoke_bedrock_model(model_id='amazon.titan-text-premier-v1:0', prompt_text=prompt)
     with open(os.path.join(MAIN_DIR, "_outputs", "_generated_TestPlan.txt"), "w", encoding='utf-8') as f:
         f.write(response_text["results"][0]["outputText"])
     return True
@@ -108,12 +118,12 @@ def use_case_3():
     file_content = knowledge_client._read_files_from_folder(os.path.join(MAIN_DIR, "_inputs"))
     prompt = file_content \
              + "This is the content of a test plan and the corresponding supplier report." \
-             + "Compare the two, highlight the differences, and make a general report on the differences and issues raised." \
-             + "Do not repeat information that has already been mentionned, but you can quote the original documents."
+             + "Compare the two, for every test, indicate if the results are compliant or not." 
+            #  + "Do not repeat information that has already been mentionned, but you can quote the original documents."
     
     # A NLP model will compare the contents using the created augmented prompt
     runtime_client = BedrockRuntimeClient()
-    response_text = runtime_client._invoke_bedrock_model(model_id='amazon.titan-text-lite-v1', prompt_text=prompt)
+    response_text = runtime_client._invoke_bedrock_model(model_id='amazon.titan-text-premier-v1:0', prompt_text=prompt)
     with open(os.path.join(MAIN_DIR, "_outputs", "_generated_Comparison.txt"), "w") as f:
         f.write(response_text["results"][0]["outputText"])
     return True
