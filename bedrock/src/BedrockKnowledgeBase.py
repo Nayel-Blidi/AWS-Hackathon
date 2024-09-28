@@ -63,7 +63,7 @@ class BedrockKnowledgeBase(BedrockClient):
             retrieveAndGenerateConfiguration={
                 'type': 'KNOWLEDGE_BASE',
                 'knowledgeBaseConfiguration': {
-                    'knowledgeBaseId': "UQKMGD9ARY",
+                    'knowledgeBaseId': KNOWLEDGE_BASE_ID,
                     'modelArn': model_arn
                 }
             }
